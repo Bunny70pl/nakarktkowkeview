@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.losowanie.databinding.ActivityMainBinding;
@@ -37,13 +38,19 @@ public class MainActivity extends AppCompatActivity {
         });
         Random random = new Random();
         losoweVieModel = new ViewModelProvider(this).get(losoweVieModel.class);
-        binding.textView.setText(String.valueOf(losoweVieModel.getLosowa()));
+        losoweVieModel.getLosowa().observe(
+                this, new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer integer) {
+                        binding.textView.setText(String.valueOf(integer));
+                    }
+                }
+        );
         binding.button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         losoweVieModel.wylosuj();
-                        binding.textView.setText(String.valueOf(losoweVieModel.getLosowa()));
                     }
                 }
         );
